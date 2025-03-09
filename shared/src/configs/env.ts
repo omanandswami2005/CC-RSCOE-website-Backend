@@ -1,5 +1,5 @@
-import dotenv from "dotenv";
-dotenv.config();
+// import dotenv from "dotenv";
+// dotenv.config();
 
 export default {
   MONGO_URI: "mongodb+srv://om:omiii@atlascluster.zo09joq.mongodb.net/ccDB"!,
