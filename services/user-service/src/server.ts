@@ -4,6 +4,6 @@ import config from "./config/env";
 
 connectDB();
 
-app.listen(config.USER_PORT, () => {
-  console.log(`🚀 Auth Service running on port ${config.USER_PORT}`);
+app.listen(5002, () => {
+  console.log(`🚀 Auth Service running on port ${5002}`);
 });
