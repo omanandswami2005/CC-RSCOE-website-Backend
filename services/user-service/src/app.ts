@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -30,7 +30,10 @@ app.use(morgan('dev'));
 app.use("/user", userRoutes);
 app.use("/team", teamRoutes);
 app.use("/general", generalRoutes);
-
+app.get("/", (req: Request, res: Response) => {
+    res.status(200).json({ message: "Healthy" });
+  });
+  
 app.use(errorHandler)
 
 export default app;

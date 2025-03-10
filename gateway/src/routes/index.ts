@@ -5,6 +5,11 @@ import { logInfo, logError } from "../utils/logger"; // Import logger
 
 const router = express.Router();
 
+//Health check endpoint
+router.get("/", (req, res) => {
+  res.status(200).json({ message: "Gateway is healthy" });
+});
+
 // Proxy requests to the Auth Service
 router.use(
   "/api/auth",

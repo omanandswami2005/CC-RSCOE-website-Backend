@@ -1,4 +1,5 @@
 import express from 'express';
+import { Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -25,6 +26,9 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 app.use("/auth", authRoutes);
+app.get("/", (req: Request, res: Response) => {
+    res.status(200).json({ message: "Healthy" });
+  });
 
 app.use(errorHandler);
 
