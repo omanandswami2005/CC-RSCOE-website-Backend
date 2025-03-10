@@ -1,9 +1,12 @@
-// generalController.ts
-import { RequestHandler } from "express";
+import { Request, Response, NextFunction, RequestHandler } from "express";
 import { createOrUpdateSubscriptionService, getSubscriptionService } from "../services/generalService";
 
 // Create or update subscription for a general member.
-export const createOrUpdateSubscription: RequestHandler = async (req, res, next) => {
+export const createOrUpdateSubscription: RequestHandler = async (
+  req: Request, 
+  res: Response, 
+  next: NextFunction
+) => {
   try {
     const { memberId, paymentId, subscription } = req.body;
     const general = await createOrUpdateSubscriptionService({ memberId, paymentId, subscription });
@@ -14,7 +17,11 @@ export const createOrUpdateSubscription: RequestHandler = async (req, res, next)
 };
 
 // Get subscription details by member ID.
-export const getSubscription: RequestHandler = async (req, res, next) => {
+export const getSubscription: RequestHandler = async (
+  req: Request, 
+  res: Response, 
+  next: NextFunction
+) => {
   try {
     const { memberId } = req.params;
     const subscription = await getSubscriptionService(memberId);

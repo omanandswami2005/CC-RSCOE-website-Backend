@@ -4,16 +4,22 @@ import helmet from "helmet";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import routes from "./routes/index";
+import errorHandler from "./middleware/errorHandler";
+import requestLogger from "./middleware/requestLogger";
+import config from "./config/env";
 
 const app = express();
+
+// ✅ Apply the middleware globally (Logs all incoming requests)
+app.use(requestLogger);
 
 // Middleware
 app.use(cors(
   {
-    origin: "https://codingclubrscoe.onrender.com",  // Allow requests from your frontend
+    origin: config.FRONTEND_URL,  // Allow requests from your frontend
     credentials: true,  // Allow cookies and authentication headers
     methods: "GET,POST,PUT,DELETE",
-    allowedHeaders: "Content-Type,Authorization"
+    allowedHeaders: ['Content-Type', 'Authorization']
 
   }
 
@@ -32,5 +38,7 @@ app.use(limiter);
 
 // Routes
 app.use("/", routes);
+
+app.use(errorHandler);
 
 export default app;

@@ -1,6 +1,6 @@
-import { Request, Response, RequestHandler } from "express";
+import {Request, Response, NextFunction, RequestHandler } from "express";
 import jwt from "jsonwebtoken";
-import config from "../../../../shared/src/configs/env";
+import config from "../config/env"; // Adjust path if needed
 
 export interface JwtPayload {
   userId: string;
@@ -9,6 +9,7 @@ export interface JwtPayload {
 
 export const authMiddleware: RequestHandler = (req, res, next) => {
   const authHeader = req.headers.authorization;
+
   
   if (!authHeader) {
     res.status(401).json({ message: "Unauthorized: No token provided" });
@@ -17,6 +18,7 @@ export const authMiddleware: RequestHandler = (req, res, next) => {
 
   // Expect token in the format "Bearer <token>"
   const token = authHeader.split(" ")[1];
+  console.log(token);
   
   if (!token) {
     res.status(401).json({ message: "Unauthorized: Invalid token format" });
@@ -27,8 +29,10 @@ export const authMiddleware: RequestHandler = (req, res, next) => {
     const decoded = jwt.verify(token, config.JWT_SECRET) as JwtPayload;
     // Attach decoded token data to the request object
     (req as any).user = decoded;
+    console.log(decoded);
     next();
   } catch (error) {
+    console.error("Error verifying token:", error);
     res.status(403).json({ message: "Invalid token" });
   }
 };

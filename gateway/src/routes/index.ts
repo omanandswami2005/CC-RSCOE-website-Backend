@@ -1,43 +1,50 @@
 import express from "express";
-import proxy from "express-http-proxy";  // Import express-http-proxy
-import config from "../config/env";     // Assuming you have a config file for your URLs
+import proxy from "express-http-proxy";
+import config from "../config/env";
+import { logInfo, logError } from "../utils/logger"; // Import logger
 
 const router = express.Router();
 
 // Proxy requests to the Auth Service
+router.use(
+  "/api/auth",
+  proxy(config.AUTH_SERVICE_URL, {
+    proxyErrorHandler: (err, res, next) => {
+      logError(`Proxy Error (Auth Service): ${err.message}`);
+      res.status(500).json({ message: "Something went wrong while contacting the Auth Service" });
+    },
+    proxyReqPathResolver: (req) => {
+      const resolvedPath = "/auth" + req.url;
+      logInfo(`🔀 Proxying Auth Request: ${req.originalUrl} → ${resolvedPath}`);
+      return resolvedPath;
+    },
+  })
+);
 
-router.use("/api/auth", proxy(config.AUTH_SERVICE_URL,
-    {
-        proxyErrorHandler: (err, res, next) => {
-          console.error("Proxy Error:", err);
-          res.status(500).json({ message: "Something went wrong while contacting the Auth Service" });
-        },
-        proxyReqPathResolver: (req) => {
-          // If a request comes to /api/user/profile, rewrite it to /user/profile for the User Service.
-          return "/auth" + req.url;
-        }
-    }
-));
-
-// For requests to /api/user, remove the /api prefix so that the User Service sees /user...
+// Proxy requests to the User Service
 router.use("/api/user", proxy(config.USER_SERVICE_URL, {
   proxyReqPathResolver: (req) => {
-    // If a request comes to /api/user/profile, rewrite it to /user/profile for the User Service.
-    return "/user" + req.url;
+    const resolvedPath = "/user" + req.url;
+    logInfo(`🔀 Proxying User Request: ${req.originalUrl} → ${resolvedPath}`);
+    return resolvedPath;
   }
 }));
 
-// For team routes: forward /api/team to /team on the User Service.
+// Proxy requests to Team routes
 router.use("/api/team", proxy(config.USER_SERVICE_URL, {
   proxyReqPathResolver: (req) => {
-    return "/team" + req.url;
+    const resolvedPath = "/team" + req.url;
+    logInfo(`🔀 Proxying Team Request: ${req.originalUrl} → ${resolvedPath}`);
+    return resolvedPath;
   }
 }));
 
-// For general subscription routes: forward /api/general to /general on the User Service.
+// Proxy requests to General Subscription routes
 router.use("/api/general", proxy(config.USER_SERVICE_URL, {
   proxyReqPathResolver: (req) => {
-    return "/general" + req.url;
+    const resolvedPath = "/general" + req.url;
+    logInfo(`🔀 Proxying General Subscription Request: ${req.originalUrl} → ${resolvedPath}`);
+    return resolvedPath;
   }
 }));
 
