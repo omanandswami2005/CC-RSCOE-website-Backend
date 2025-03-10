@@ -1,10 +1,11 @@
 // /services/user-service/src/services/memberService.ts
 import axios from "axios";
+import config from "../config/env";
 
 export const fetchUserProfile = async (memberId: string) => {
   try {
     // Call the Auth Service API endpoint to fetch the member profile
-    const response = await axios.get(`http://localhost:5000/api/auth/profile/${memberId}`);
+    const response = await axios.get(`${config.AUTH_URL}/api/auth/profile/${memberId}`);
     // Return the user data from the Auth Service
     const userData = response.data as { user: any };
     return userData.user;
@@ -18,7 +19,7 @@ export const fetchUserProfile = async (memberId: string) => {
 export const updateUserProfile = async (memberId: string, data: any) => {
   try {
     // Call the Auth Service API endpoint to update the member profile
-    const response = await axios.put(`http://localhost:5001/api/auth/profile/${memberId}`, data);
+    const response = await axios.put(`${config.AUTH_URL}/api/auth/profile/${memberId}`, data);
     // Return the updated user data from the Auth Service
     const userData = response.data as { user: any };
     return userData.user;
