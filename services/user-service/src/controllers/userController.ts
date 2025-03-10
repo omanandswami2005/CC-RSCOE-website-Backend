@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { fetchUserProfile, updateUserProfile } from "../services/memberService";
+import { fetchUserProfile, updateUserProfile } from "../services/userService";
 
 export const getProfile: RequestHandler = async (req, res, next) => {
   try {

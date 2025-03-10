@@ -48,6 +48,7 @@ export const getProfileById = async (req: Request, res: Response, next: NextFunc
   try {
     const profileId = req.params.id;
     // Your logic to get the profile by ID
+    // console.log(profileId)
     const profile = await getUserProfileById(profileId); // Replace with your actual logic
 
     if (!profile) {

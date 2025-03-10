@@ -26,9 +26,9 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 app.use("/auth", authRoutes);
-app.get("/", (req: Request, res: Response) => {
-    res.status(200).json({ message: "Healthy" });
-  });
+// app.get("/", (req: Request, res: Response) => {
+//     res.status(200).json({ message: "Healthy" });
+//   });
 
 app.use(errorHandler);
 
